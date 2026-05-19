@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +39,7 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
     public static final MapCodec<DrillBlock> CODEC = simpleCodec(DrillBlock::new);
     public static final DirectionProperty FACING = DirectionProperty.create("facing");
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty HAS_TOOL = BooleanProperty.create("has_tool");
 
     public DrillBlock(Properties p_49224_) {
         super(p_49224_);
@@ -46,6 +48,29 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.DRILL_BE.get(), DrillBlockEntity::staticTick);
+    }
+
+    @Override
+    protected boolean isSignalSource(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        if (level.getBlockEntity(pos) instanceof DrillBlockEntity be && direction == state.getValue(FACING).getOpposite()) {
+            return be.getToolSignal();
+        }
+
+        return super.getDirectSignal(state, level, pos, direction);
+    }
+
+    @Override
+    protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        if (level.getBlockEntity(pos) instanceof DrillBlockEntity be && direction == state.getValue(FACING)) {
+            return be.getToolSignal();
+        }
+
+        return super.getSignal(state, level, pos, direction);
     }
 
     @Override
@@ -108,12 +133,12 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED);
+        builder.add(FACING, POWERED, HAS_TOOL);
     }
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(POWERED, false).setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState().setValue(POWERED, false).setValue(HAS_TOOL, false).setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override

@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -29,10 +30,12 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import org.prism.autowork.block.ModBlockEntities;
+import org.prism.autowork.block.ModBlocks;
 import org.prism.autowork.other.ModOther;
 import org.prism.autowork.other.ModUtils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DrillBlockEntity extends BlockEntity {
     public ItemStackHandler handler = new ItemStackHandler(9);
@@ -100,6 +103,22 @@ public class DrillBlockEntity extends BlockEntity {
         return !tool.isEmpty();
     }
 
+    public int getToolSignal() {
+        if (!hasTool()) {
+            return 0;
+        }
+        else {
+            try {
+                var x = (int) (((float) tool.get(DataComponents.DAMAGE) / (float) tool.get(DataComponents.MAX_DAMAGE)) * 15f);
+                return Mth.clamp(x, 0, 15);
+            }
+            catch (Exception ex) {
+                // Just in case
+                return 0;
+            }
+        }
+    }
+
     public ItemStack extractTool() {
         if (!tool.isEmpty()) {
             var toReturn = this.tool;
@@ -129,7 +148,28 @@ public class DrillBlockEntity extends BlockEntity {
     }
 
     public void tick(BlockState state, ServerLevel level, BlockPos pos) {
-        if (!level.hasNeighborSignal(pos)) {
+        if (hasTool()) {
+            if (!state.getValue(DrillBlock.HAS_TOOL)) {
+                level.setBlockAndUpdate(pos, state.setValue(DrillBlock.HAS_TOOL, true));
+            }
+        }
+        else {
+            if (state.getValue(DrillBlock.HAS_TOOL)) {
+                level.setBlockAndUpdate(pos, state.setValue(DrillBlock.HAS_TOOL, false));
+            }
+        }
+
+
+        var face = state.getValue(DrillBlock.FACING);
+        AtomicBoolean anySignal = new AtomicBoolean(false);
+        for (var d : Direction.values()) {
+            if (!d.equals(face.getOpposite()) && !d.equals(face) && level.hasSignal(ModUtils.lookTo(pos, d.getOpposite()), d)) {
+                anySignal.set(true);
+                break;
+            }
+        }
+
+        if (!anySignal.get()) {
             if (state.getValue(DrillBlock.POWERED)) {
                 level.setBlockAndUpdate(pos, state.setValue(DrillBlock.POWERED, false));
             }
@@ -138,9 +178,7 @@ public class DrillBlockEntity extends BlockEntity {
         if (!state.getValue(DrillBlock.POWERED)) {
             level.setBlockAndUpdate(pos, state.setValue(DrillBlock.POWERED, true));
         }
-
-
-        var front = ModUtils.lookTo(pos, state.getValue(DrillBlock.FACING));
+        var front = ModUtils.lookTo(pos, face);
         var blockInFront = level.getBlockState(front);
 
         if (!tool.isCorrectToolForDrops(blockInFront) && blockInFront.requiresCorrectToolForDrops()) {
@@ -180,7 +218,7 @@ public class DrillBlockEntity extends BlockEntity {
                     .withOptionalParameter(
                             LootContextParams.BLOCK_ENTITY,
                             level.getBlockEntity(front)
-                    );;
+                    );
 
             List<ItemStack> drops =
                     blockInFront.getDrops(params);
@@ -212,6 +250,7 @@ public class DrillBlockEntity extends BlockEntity {
 
             progress = 0;
 
+            level.sendBlockUpdated(pos, state, state, 2);
             this.setChanged();
         }
         else {
@@ -224,9 +263,6 @@ public class DrillBlockEntity extends BlockEntity {
             this.setChanged();
         }
 
-
-
-
         this.setChanged();
     }
 
@@ -237,6 +273,7 @@ public class DrillBlockEntity extends BlockEntity {
     public static void staticTick(Level level, BlockPos pos, BlockState state, DrillBlockEntity blockEntity) {
         if (!level.isClientSide) {
             blockEntity.tick(state, (ServerLevel) level, pos);
+            level.updateNeighborsAt(pos, ModBlocks.DRILL.get());
         }
     }
 
