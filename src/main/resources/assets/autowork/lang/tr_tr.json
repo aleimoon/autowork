@@ -2,26 +2,39 @@
   "autowork.configuration.distributorRange": "Paylaştırıcı tarama menzili",
   "autowork.configuration.crushingHudHelper": "'Öğütme' HUD'unu göster",
   "autowork.configuration.machinesWorkOnlyOnPulse": "[Gelişim Aşamasında] Makineler sadece tek yüklük redstone sinyaliyle çalışır",
+  "autowork.configuration.transmitterSignalLifetime": "Verici sinyalinin ömrü (birim zamanla)",
+  "autowork.configuration.newRedstoneDetection": "Yeni redstone algılama sistemi. Eskisinden daha iyi de olabilir daha buglı da",
 
   "itemGroup.autowork": "Autowork",
+
+  "item.autowork.redstone_charge": "Redstone Topu",
+  "item.autowork.wrench": "Tamir Anahtarı",
+
   "block.autowork.chute": "Kanal",
+  "block.autowork.transmitter": "Verici",
+  "block.autowork.andgate": "VE Kapısı",
   "block.autowork.filter_chute": "Filtreli Kanal",
   "block.autowork.fan": "Pervane",
   "block.autowork.drill": "Matkap",
   "block.autowork.placer": "Yerleştirici",
   "block.autowork.cartloader": "Vagon Yükleyici",
   "block.autowork.cartunloader": "Vagon Boşaltıcı",
-  "block.autowork.ticker": "Tıklayıcı",
+  "block.autowork.ticker": "Zamanlayıcı",
   "block.autowork.distributor": "Paylaştırıcı",
   "block.autowork.ticker.set": "Süre şuna ayarlandı: %dt",
-  "block.autowork.breeze_collector": "Meltem Toplayıcı",
+  "block.autowork.breeze_collector": "Esinti Toplayıcı",
   "block.autowork.extractor": "Aktarıcı",
   "enchantment.autowork.crushing": "Öğütme",
 
   "autowork.crushing_description": "'Öğütme' Büyüsü Gerekir",
 
+  "itemhelp.autowork.wrench": "Bazen makineler donar (çoğunlukla oyunun çökmesi yüzünden). Onları tekrar çalıştırmak için Tamir Anahtarı kullanın.",
+
+  "itemhelp.show_more": "Daha fazla bilgi için Ctrl'ye basın",
   "blockhelp.show_more": "Daha fazla bilgi için Ctrl/Shift'e basın",
   "blockhelp.direction.west": "Batı",
+  "blockhelp.direction.left": "Sol",
+  "blockhelp.direction.right": "Sağ",
   "blockhelp.direction.east": "Doğu",
   "blockhelp.direction.north": "Kuzey",
   "blockhelp.direction.south": "Güney",
@@ -45,6 +58,7 @@
   "blockhelp.autowork.cartloader.top": "Sandıklı Vagon bulunduran depolama gerekli",
   "blockhelp.autowork.cartloader.details": "İki depolama da sağlandığında önüne bir vagon yerleştirir; sonra arkasındaki depolamada bulunan eşyaları bu vagonun içine aktarır",
 
+  
   "blockhelp.autowork.cartunloader.details": "İki depolama da sağlandığında ve önünden bir vagon geçtiğinde, bu vagonun içinde bulunan eşyaları arkasındaki depolamaya, vagonun kendisini de üstündeki depolamaya aktarır",
 
   "blockhelp.autowork.chute.bottom": "Hava/Depolama",
@@ -76,6 +90,14 @@
 
   "blockhelp.autowork.ticker.back": "Redstone sinyali gerekli",
   "blockhelp.autowork.ticker.front": "Redstone sinyali çıktısı",
-  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-tik sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Tıklayıcının üstüne sağ tıklayarak zamanlayıcı kurun"
+  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-tik sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Zamanlayıcının üstüne sağ tıklayarak saat kurun"
 
+  "blockhelp.autowork.transmitter.back": "Güç verilince: önünden sinyal küresi fırlatır",
+  "blockhelp.autowork.transmitter.back2": "Sinyal küresi alınca: sinyal verir",
+  "blockhelp.autowork.transmitter.front": "Sinyal alır/fırlatır",
+  "blockhelp.autowork.transmitter.details": "Havadan redstone sinyali aktarılması gereken durumlarda kullanılır",
+
+  "blockhelp.autowork.andgate.front": "Sinyal çıktısı",
+  "blockhelp.autowork.andgate.side": "Sinyal girdisi",
+  "blockhelp.autowork.andgate.details": "Yalnızca her iki yanından da güç verildiğinde sinyal verir"
 }
