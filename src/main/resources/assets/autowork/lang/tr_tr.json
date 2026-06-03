@@ -56,10 +56,10 @@
 
 
   "blockhelp.autowork.cartloader.top": "Sandıklı Vagon bulunduran depolama gerekli",
-  "blockhelp.autowork.cartloader.details": "İki depolama da sağlandığında önüne bir vagon yerleştirir; sonra arkasındaki depolamada bulunan eşyaları bu vagonun içine aktarır",
+  "blockhelp.autowork.cartloader.details": "İki depolama da sağlandığında önüne bir vagon yerleştirir, sonra arkasındaki depolamada bulunan eşyaları bu vagonun içine aktarır",
 
   
-  "blockhelp.autowork.cartunloader.details": "İki depolama da sağlandığında ve önünden bir vagon geçtiğinde, bu vagonun içinde bulunan eşyaları arkasındaki depolamaya, vagonun kendisini de üstündeki depolamaya aktarır",
+  "blockhelp.autowork.cartunloader.details": "İki depolama da sağlandığında ve önünden bir vagon geçtiğinde; bu vagonun içinde bulunan eşyaları arkasındaki depolamaya, vagonun kendisini de üstündeki depolamaya aktarır",
 
   "blockhelp.autowork.chute.bottom": "Hava/Depolama",
   "blockhelp.autowork.chute.details": "Eşyaları aşağıya doğru aktarır",
@@ -90,7 +90,7 @@
 
   "blockhelp.autowork.ticker.back": "Redstone sinyali gerekli",
   "blockhelp.autowork.ticker.front": "Redstone sinyali çıktısı",
-  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-tik sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Zamanlayıcının üstüne sağ tıklayarak saat kurun"
+  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-birim zaman sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Zamanlayıcının üstüne sağ tıklayarak sayaç kurun"
 
   "blockhelp.autowork.transmitter.back": "Güç verilince: önünden sinyal küresi fırlatır",
   "blockhelp.autowork.transmitter.back2": "Sinyal küresi alınca: sinyal verir",
