@@ -46,6 +46,11 @@ public record BlockHelpInfo(List<Component> technical, List<Component> details) 
             return this;
         }
 
+        public Builder configurable_by_sign() {
+            tech.add(Component.translatable("blockhelp.sign_configurable").withColor(0xb3b3b3));
+            return this;
+        }
+
         public Builder storage_required(Direction direction) {
             return direction("blockhelp.storage_required", direction);
         }
@@ -117,6 +122,16 @@ public record BlockHelpInfo(List<Component> technical, List<Component> details) 
                             .append(
                                     Component.translatable(translation).withColor(0xffa647))
 
+                    ));
+            return this;
+        }
+
+        public Builder side(String translation) {
+            tech.add(Component.empty()
+                    .append(Component.translatable("blockhelp.direction.side").withColor(0x47ffd1)
+                            .append(": ")
+                            .append(
+                                    Component.translatable(translation).withColor(0xffa647))
                     ));
             return this;
         }

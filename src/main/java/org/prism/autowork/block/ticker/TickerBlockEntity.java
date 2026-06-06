@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CalibratedSculkSensorBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import org.prism.autowork.block.ModBlockEntities;
 import org.prism.autowork.block.ModBlocks;
@@ -33,7 +34,7 @@ public class TickerBlockEntity extends BlockEntity {
     private int curTick = 0;
 
     public void tick(ServerLevel level, BlockPos pos, BlockState state) {
-        var face = state.getValue(TickerBlock.FACING);
+        var face = state.getValue(BlockStateProperties.FACING);
 
         if (ModUtils.hasSignal(level, pos, face)) {
             var calculatedStage = Mth.clamp((int) (((float) curTick / setTicks) * 4f), 0, 4);
@@ -52,6 +53,11 @@ public class TickerBlockEntity extends BlockEntity {
             setChanged();
             updateNeighborsInFront(level, pos, state);
         }
+        else {
+            if (state.getValue(TickerBlock.STAGE) == 4) {
+                level.setBlockAndUpdate(pos, state.setValue(TickerBlock.STAGE, 0));
+            }
+        }
     }
 
     public void setTicks(int val) {
@@ -67,7 +73,7 @@ public class TickerBlockEntity extends BlockEntity {
     }
 
     protected void updateNeighborsInFront(Level level, BlockPos pos, BlockState state) {
-        Direction direction = (Direction)state.getValue(TickerBlock.FACING);
+        Direction direction = state.getValue(BlockStateProperties.FACING);
         BlockPos blockpos = pos.relative(direction.getOpposite());
         level.neighborChanged(blockpos, ModBlocks.TICKER.get(), pos);
         level.updateNeighborsAtExceptFromFacing(blockpos, ModBlocks.TICKER.get(), direction);
