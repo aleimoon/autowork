@@ -1,35 +1,177 @@
 {
   "autowork.configuration.distributorRange": "Paylaştırıcı tarama menzili",
   "autowork.configuration.crushingHudHelper": "'Öğütme' HUD'unu göster",
-  "autowork.configuration.machinesWorkOnlyOnPulse": "[Gelişim Aşamasında] Makineler sadece tek yüklük redstone sinyaliyle çalışır",
   "autowork.configuration.transmitterSignalLifetime": "Verici sinyalinin ömrü (birim zamanla)",
   "autowork.configuration.newRedstoneDetection": "Yeni redstone algılama sistemi. Eskisinden daha iyi de olabilir daha buglı da",
+  "autowork.configuration.bufferHudRender": "Render buffer's hud",
+  "autowork.configuration.sculkMoverRange": "Sculk Mover range",
+  "autowork.configuration.holderDecorRender": "Render decorations of item when looking at holder",
+  "autowork.configuration.pumpRange": "Pompa menzili",
+  "autowork.configuration.chestMinecartLoadChunks": "Minecarts with chest loading chunks",
+  "autowork.configuration.sculkCellCapacity": "Sculk cell capacity",
+  "autowork.configuration.sawBlockLimit": "Testere bloğu limiti",
+  "autowork.configuration.sawBlockSpeed": "Testere bloğu hızı",
+  "autowork.configuration.blockhelpTooltips": "Blok ipucu metinlerini göster",
 
   "itemGroup.autowork": "Autowork",
 
+  "creativetab.autowork.base_machines": "Temel Makineler",
+  "creativetab.autowork.railway": "Demiryolu",
+  "creativetab.autowork.redstone": "Redstone",
+  "creativetab.autowork.fluids": "Sıvılar",
+  "creativetab.autowork.misc": "Çeşitli",
+  "creativetab.autowork.ores": "Cevherler",
+  "creativetab.autowork.experience": "Tecrübe",
+  "creativetab.autowork.farming": "Tarım",
+
+  "item.autowork.dye_cartridge.uses": "%d / %d kullanım",
+  "item.autowork.dye_cartridge.dyes": "%d / %d boya",
+  "item.autowork.dye_cartridge.insert_dye": "Click with dye on the cartridge to insert it",
+  
   "item.autowork.redstone_charge": "Redstone Topu",
   "item.autowork.wrench": "Tamir Anahtarı",
+  "item.autowork.dye_cartridge": "Dye Cartridge",
+  "item.autowork.template_card": "Template Card",
+
+  "block.autowork.can.info.n": "Nutrition: %s",
+  "block.autowork.can.info.s": "Doygunluk: %s",
+  "block.autowork.can.info.uses": "Kullanım: %d / 9",
 
   "block.autowork.chute": "Kanal",
+  "block.autowork.harvester": "Hasatçı",
+  "block.autowork.saw": "Testere",
+  "block.autowork.can": "Konserve",
+  "block.autowork.canner": "Konserveci",
+  "block.autowork.opened_can": "Açılmış Konserve",
+  "block.autowork.empty_can": "Boş Konserve",
+  "block.autowork.fisher": "Balıkçı",
+  "block.autowork.repair_station": "Smither",
+  "block.autowork.sculk_cell": "Sculk Cell",
+  "block.autowork.controlled_catalyst": "Controlled Catalyst",
+  "block.autowork.amethyst_bulb": "Ametist Ampul",
+  "block.autowork.quartz_bulb": "Kuvars Ampul",
+  "block.autowork.rotator": "Döndürücü",
+  "block.autowork.carrier": "Taşıyıcı",
+  "block.autowork.templater": "Templater",
+  "block.autowork.modular_carrier": "Modular Carrier",
+  "block.autowork.painter": "Painter",
+  "block.autowork.holder": "Holder",
+  "block.autowork.redstone_hub": "Redstone Hub",
+  "block.autowork.redstone_coil": "Redstone Coil",
   "block.autowork.transmitter": "Verici",
   "block.autowork.andgate": "VE Kapısı",
+  "block.autowork.enricher": "Enricher",
   "block.autowork.filter_chute": "Filtreli Kanal",
+  "block.autowork.railway_observer": "Railway Observer",
+  "block.autowork.toggler": "Toggler",
   "block.autowork.fan": "Pervane",
+  "block.autowork.buffer": "Buffer",
   "block.autowork.drill": "Matkap",
   "block.autowork.placer": "Yerleştirici",
+  "block.autowork.pump": "Pump",
   "block.autowork.cartloader": "Vagon Yükleyici",
+  "block.autowork.cartrefiller": "Cart Refiller",
+  "block.autowork.buffered_cartloader": "Buffered Cart Loader",
   "block.autowork.cartunloader": "Vagon Boşaltıcı",
+  "block.autowork.buffered_cartunloader": "Buffered Cart Unloader",
+  "block.autowork.buffered_cartrefiller": "Buffered Cart Refiller",
   "block.autowork.ticker": "Zamanlayıcı",
   "block.autowork.distributor": "Paylaştırıcı",
   "block.autowork.ticker.set": "Süre şuna ayarlandı: %dt",
   "block.autowork.breeze_collector": "Esinti Toplayıcı",
+  "block.autowork.buffered_breeze_collector": "Buffered Breeze Collector",
   "block.autowork.extractor": "Aktarıcı",
+  "block.autowork.fluid_extractor": "Fluid Extractor",
+  "block.autowork.fluid_barrel": "Fluid Barrel",
+  "block.autowork.precise_observer": "Precise Observer",
+  "block.autowork.sculk_mover": "Sculk Mover",
+  "block.autowork.spiller": "Spiller",
+  "block.autowork.smelter": "Smelter",
   "enchantment.autowork.crushing": "Öğütme",
+  "enchantment.autowork.crushing.desc": "Crushes certain blocks when mined, enabling different drops.",
+
+  "block.autowork.enriched_lapis_ore": "Enriched Lapis Ore",
+  "block.autowork.deepslate_enriched_lapis_ore": "Deepslate Enriched Lapis Ore",
+  "block.autowork.enriched_redstone_ore": "Enriched Redstone Ore",
+  "block.autowork.deepslate_enriched_redstone_ore": "Deepslate Enriched Redstone Ore",
+  "block.autowork.enriched_copper_ore": "Enriched Copper Ore",
+  "block.autowork.deepslate_enriched_copper_ore": "Deepslate Enriched Copper Ore",
+  "block.autowork.enriched_iron_ore": "Enriched Iron Ore",
+  "block.autowork.deepslate_enriched_iron_ore": "Deepslate Enriched Iron Ore",
+  "block.autowork.enriched_diamond_ore": "Enriched Diamond Ore",
+  "block.autowork.deepslate_enriched_diamond_ore": "Deepslate Enriched Diamond Ore",
+  "block.autowork.enriched_coal_ore": "Enriched Coal Ore",
+  "block.autowork.deepslate_enriched_coal_ore": "Deepslate Enriched Coal Ore",
+  "block.autowork.enriched_emerald_ore": "Enriched Emerald Ore",
+  "block.autowork.deepslate_enriched_emerald_ore": "Deepslate Enriched Emerald Ore",
+  "block.autowork.enriched_gold_ore": "Enriched Gold Ore",
+  "block.autowork.deepslate_enriched_gold_ore": "Deepslate Enriched Gold Ore",
+  "block.autowork.enriched_nether_gold_ore": "Enriched Nether Gold Ore",
+  "block.autowork.enriched_nether_quartz_ore": "Enriched Nether Quartz Ore",
+
+  "autowork.recipe.spilling": "Spilling",
+  "autowork.recipe.painting": "Painting",
+  "autowork.recipe.enriching": "Enriching",
+  "autowork.recipe.smelting": "Smelting",
+  "autowork.recipe.required": "%dmb of Lava",
+
+  "block.autowork.rotator.angle": "Angle: ",
 
   "autowork.crushing_description": "'Öğütme' Büyüsü Gerekir",
 
   "itemhelp.autowork.wrench": "Bazen makineler donar (çoğunlukla oyunun çökmesi yüzünden). Onları tekrar çalıştırmak için Tamir Anahtarı kullanın.",
+   "itemhelp.autowork.template_card": "Template card is required for templater. Shift + Right-click on container to make a template of its inventory (direction is taken into account). Then you can use it in templater",
 
+  "item.autowork.template_card.sides": "Sides",
+  "item.autowork.template_card.items": "Items",
+
+  "blockhelp.autowork.templater.details": "Tries to put items by given template (in exactly same slots). Will not do anything if there's not enough items. Requires template card.",
+
+  "blockhelp.autowork.sculk_cell.details": "Stores experience. Right-click to deposit your experience and shift + right-click to take experience.",
+
+  "blockhelp.autowork.controlled_catalyst.details": "Collects and puts experience orbs into Sculk Cell below when powered",
+  "blockhelp.autowork.controlled_catalyst.bottom": "Sculk cell required",
+
+  "blockhelp.autowork.repair_station.details": "Tries to repair tool when powered. If the tool has mending enchantment it'll only use experience, if not - it'll require both experience and repair material. Tries to put repaired tool in storage in front of itself, if fails - drops it",
+
+  "blockhelp.autowork.amethyst_bulb.back": "Redstone output",
+  "blockhelp.autowork.amethyst_bulb.details": "Emits signal impulse when redstone signal disappears on all the sides",
+
+  "blockhelp.autowork.quartz_bulb.back": "Redstone output",
+  "blockhelp.autowork.quartz_bulb.details": "Emits signal impulse when redstone signal appears on at least one side",
+
+  "blockhelp.autowork.modular_carrier.front": "Block to move",
+  "blockhelp.autowork.modular_carrier.top": "Other Modular Carrier",
+  "blockhelp.autowork.modular_carrier.bottom": "Other Modular Carrier",
+  "blockhelp.autowork.modular_carrier.details": "Moves block in front of itself along when rotated. Also rotates other Modular Carriers above or below itself",
+
+  "blockhelp.autowork.carrier.front": "Block to move",
+  "blockhelp.autowork.carrier.details": "Moves block in front of itself along when powered and rotated",
+
+  "blockhelp.autowork.rotator.front": "Block to rotate",
+  "blockhelp.autowork.rotator.details": "Rotates block in front of itself. Angle is configurable by right-clicking: 90, 180 or 270",
+
+  "blockhelp.autowork.redstone_coil.details": "Emits concrete power of signal, configurable by right-clicking",
+  "blockhelp.autowork.redstone_coil.side": "Redstone Output",
+
+  "blockhelp.autowork.redstone_hub.side": "Redstone output/input",
+  "blockhelp.autowork.redstone_hub.front": "Other redstone hubs",
+  "blockhelp.autowork.redstone_hub.details": "All outputs emit redstone signal when any of input side has redstone signal. Node's mode can be changed by right-clicking",
+  "blockhelp.autowork.redstone_hub.none_mode": "NONE: Does nothing",
+  "blockhelp.autowork.redstone_hub.input_mode": "INPUT: Only receives signal",
+  "blockhelp.autowork.redstone_hub.output_mode": "OUTPUT: Only emits signal",
+
+  "blockhelp.autowork.holder.details": "Holds item in itself. If item can contain fluid, energy or other items, it'll 'proxy' its capabilities through the block (works best with other mods; probably)",
+  "blockhelp.autowork.holder.bottom": "Fluid/Item/Energy proxy to item",
+
+  "blockhelp.autowork.enricher.details": "Enriches ore in front of itself when has fuel. Enriched ore drops a little bit more of resources than normal one",
+  "blockhelp.autowork.enricher.front": "Place for ores",
+
+  "blockhelp.autowork.painter.front": "Block to dye",
+  "blockhelp.autowork.painter.details": "Tries to dye the block in front of it using given dye",
+
+  "blockhelp.warn.critical": "⚠ WIP! Might cause crashes. Report critical issues on Github.",
+  
   "itemhelp.show_more": "Daha fazla bilgi için Ctrl'ye basın",
   "blockhelp.show_more": "Daha fazla bilgi için Ctrl/Shift'e basın",
   "blockhelp.direction.west": "Batı",
@@ -42,22 +184,45 @@
   "blockhelp.direction.down": "Alt",
   "blockhelp.direction.front": "Ön",
   "blockhelp.direction.back": "Arka",
+  "blockhelp.direction.side": "Other Sides",
   "blockhelp.multiblock": "Çok bloklu bir yapıda kullanılır",
   "blockhelp.storage": "Depolamaya sahip",
+  "blockhelp.fluid_storage": "Has fluid storage",
   "blockhelp.storage_required": "Depolama gerekli",
+  "blockhelp.fluid_storage_required": "Fluid storage required",
   "blockhelp.no_storage": "Depolamaya sahip DEĞİL",
+  "blockhelp.no_fluid_storage": "Has NO fluid storage",
   "blockhelp.works_when_powered": "Güç verilince çalışır",
   "blockhelp.works_when_unpowered": "Güç verilmezse çalışır",
   "blockhelp.power_depends": "Sinyal gücüne bağlı olarak çalışır",
+  "blockhelp.sign_configurable": "Configurable by signs",
 
 
   "blockhelp.autowork.breeze_collector.front": "Eşyaları toplar",
   "blockhelp.autowork.breeze_collector.details": "Güç verildiğinde önündeki eşyaları içine çeker",
 
+  "blockhelp.autowork.buffer.details": "Can hold 9 stacks. Right-click with item in your hand to put it in buffer or right-click without item to get last stack of buffer",
 
+  "blockhelp.autowork.buffered_breeze_collector.details": "When powered, sucks in all items in front of it and puts them in internal storage",
+  
   "blockhelp.autowork.cartloader.top": "Sandıklı Vagon bulunduran depolama gerekli",
   "blockhelp.autowork.cartloader.details": "İki depolama da sağlandığında önüne bir vagon yerleştirir, sonra arkasındaki depolamada bulunan eşyaları bu vagonun içine aktarır",
 
+  "blockhelp.autowork.cartrefiller.details": "Puts items into already existing minecart with chest in front of it",
+
+  "blockhelp.autowork.buffered_cartloader.side": "Content in",
+  "blockhelp.autowork.buffered_cartloader.top": "Minecarts in",
+  "blockhelp.autowork.buffered_cartloader.details": "Spawns a minecart if both storages are provided; then puts contents of its storage into minecart",
+
+  "blockhelp.autowork.buffered_cartunloader.details": "When minecart passes by, Cart Unloader will unload it: all its contents would be transferred to the internal storage",
+
+  "blockhelp.autowork.cart.side": "Side for sign",
+
+  "blockhelp.autowork.railway.top": "Redstone çıktısı",
+  "blockhelp.autowork.railway.details": "Detects minecart, can filter them by name if sign is placed",
+
+  "blockhelp.autowork.toggler.back": "Redstone çıktısı",
+  "blockhelp.autowork.toggler.details": "Works like copper bulb but has one side with output; it emits signal when bulb is lit",
   
   "blockhelp.autowork.cartunloader.details": "İki depolama da sağlandığında ve önünden bir vagon geçtiğinde; bu vagonun içinde bulunan eşyaları arkasındaki depolamaya, vagonun kendisini de üstündeki depolamaya aktarır",
 
@@ -75,6 +240,30 @@
 
   "blockhelp.autowork.extractor.details": "Arkasındaki depolamada bulunan eşyaları önündeki depolamaya aktarır",
 
+  "blockhelp.autowork.pump.details": "When has fuel and liquid below itself, starts pulling the fluid to it and then tries to put it into fluid storage above. When pump finishes it's work it emits redstone signal.",
+  "blockhelp.autowork.pump.top": "Sıvı depolaması",
+  "blockhelp.autowork.pump.bottom": "Boş yer/Sıvı",
+
+  "blockhelp.autowork.sculk_mover.front": "Blok tespit yönü",
+  "blockhelp.autowork.sculk_mover.details": "Moves blocks in front of itself closer when powered with redstone, including some that are not movable by pistons",
+
+  "blockhelp.autowork.fluid_extractor.front": "Empty block/Fluid storage",
+  "blockhelp.autowork.fluid_extractor.back": "Fluid block/Fluid storage",
+  "blockhelp.autowork.fluid_extractor.details": "Replaces block in front of itself with fluid behind. If there is a storage in front of it, it'll put the fluid in it. If there is a storage behind AND in front of it, it'll transfer 1000mb of fluid",
+
+  "blockhelp.autowork.smelter.front": "Block to transform",
+  "blockhelp.autowork.smelter.details": "Tries to convert one block into another using lava",
+
+  "blockhelp.autowork.spiller.front": "Sıvı yerleşim yeri",
+  "blockhelp.autowork.spiller.details": "Places fluid from storage in front of itself if there is space. If not, it'll try to convert block in front of itself using fluid",
+
+  "blockhelp.autowork.precise_observer.back": "Redstone çıktısı",
+  "blockhelp.autowork.precise_observer.front": "Gözlemlenen blok",
+  "blockhelp.autowork.precise_observer.details": "Configurable observer; will emit signal only when specific block is in front of it",
+
+  "blockhelp.autowork.fluid_barrel.capacity": "5000mb Kapasite",
+  "blockhelp.autowork.fluid_barrel.details": "Fluids can be inserted/extracted manually when fluid is opened. Drops itself with fluid contents when broken",
+  
   "blockhelp.autowork.fan.front": "Rüzgar",
   "blockhelp.autowork.fan.details": "Sadece bir pervane",
   "blockhelp.autowork.fan.addition": "Rüzgar yönünü değiştirmek için sağ tıklayın",
@@ -90,7 +279,7 @@
 
   "blockhelp.autowork.ticker.back": "Redstone sinyali gerekli",
   "blockhelp.autowork.ticker.front": "Redstone sinyali çıktısı",
-  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-birim zaman sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Zamanlayıcının üstüne sağ tıklayarak sayaç kurun"
+  "blockhelp.autowork.ticker.details": "Bir saati dakika-saniye-birim zaman sıralamasıyla şu formatta isimlendirin: XmYsZt (X/Y/Z yerine istediğiniz sayıları yazın. m/s/t'yi DEĞİŞTİRMEYİN) ve Zamanlayıcının üstüne sağ tıklayarak sayaç kurun",
 
   "blockhelp.autowork.transmitter.back": "Güç verilince: önünden sinyal küresi fırlatır",
   "blockhelp.autowork.transmitter.back2": "Sinyal küresi alınca: sinyal verir",
@@ -99,5 +288,18 @@
 
   "blockhelp.autowork.andgate.front": "Sinyal çıktısı",
   "blockhelp.autowork.andgate.side": "Sinyal girdisi",
-  "blockhelp.autowork.andgate.details": "Yalnızca her iki yanından da güç verildiğinde sinyal verir"
+  "blockhelp.autowork.andgate.details": "Yalnızca her iki yanından da güç verildiğinde sinyal verir",
+
+
+  "autowork.ponder.canner.header": "Konserve Yapımı",
+  "autowork.ponder.canner.text_1": "This is a canner",
+  "autowork.ponder.canner.text_2": "Place an empty can under it, then put some food in it as well",
+  "autowork.ponder.canner.text_3": "Then, power it with redstone signal",
+  "autowork.ponder.canner.text_4": "Congratulations! You canned your first can",
+
+  "autowork.ponder.saw.header": "Testere Kullanımı",
+  "autowork.ponder.saw.text_1": "Bu bir Testere.",
+  "autowork.ponder.saw.text_2": "Bir ağacın önüne testere yerleştirin, içine biraz yakıt koyun.",
+  "autowork.ponder.saw.text_3": "Sonra sürekli redstone sinyali vererek çalıştırın.",
+  "autowork.ponder.saw.text_4": "Ağacı yok etmeye başlayacaktır."
 }
