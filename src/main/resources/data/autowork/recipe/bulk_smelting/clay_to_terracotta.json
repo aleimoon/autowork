@@ -1,0 +1,10 @@
+{
+  "type": "autowork:bulk_smelting",
+  "amount": 100,
+  "block": {
+    "item": "minecraft:clay"
+  },
+  "result": {
+    "id": "minecraft:terracotta"
+  }
+}

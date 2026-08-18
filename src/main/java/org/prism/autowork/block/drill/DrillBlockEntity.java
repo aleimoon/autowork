@@ -23,6 +23,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -83,7 +84,7 @@ public class DrillBlockEntity extends BlockEntity implements MenuProvider {
 
     public boolean putTool(ItemStack tool) {
         if (this.tool.isEmpty()) {
-            this.tool = tool.copy();
+            toolHandler.insertItem(0, tool.copy(), false);
             setChanged();
             return true;
         }
@@ -154,19 +155,19 @@ public class DrillBlockEntity extends BlockEntity implements MenuProvider {
         }
 
 
-        var face = state.getValue(DrillBlock.FACING);
+        var face = state.getValue(BlockStateProperties.FACING);
         AtomicBoolean anySignal = new AtomicBoolean(level.hasNeighborSignal(pos));
 
         if (!anySignal.get()) {
-            if (state.getValue(DrillBlock.POWERED)) {
-                level.setBlockAndUpdate(pos, state.setValue(DrillBlock.POWERED, false));
+            if (state.getValue(BlockStateProperties.POWERED)) {
+                level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, false));
             }
             return;
         }
-        if (!state.getValue(DrillBlock.POWERED)) {
-            level.setBlockAndUpdate(pos, state.setValue(DrillBlock.POWERED, true));
+        if (!state.getValue(BlockStateProperties.POWERED)) {
+            level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, true));
         }
-        var front = ModUtils.lookTo(pos, face);
+        var front = ModUtils.safeBlockPos(ModUtils.lookTo(pos, face), level);
         var blockInFront = level.getBlockState(front);
 
         if (!tool.isCorrectToolForDrops(blockInFront) && blockInFront.requiresCorrectToolForDrops()) {
@@ -181,7 +182,7 @@ public class DrillBlockEntity extends BlockEntity implements MenuProvider {
 
         float toolSpeed = tool.getDestroySpeed(blockInFront);
 
-        int effLevel = tool.getEnchantmentLevel(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.EFFICIENCY));
+        int effLevel = ModUtils.getEnchantment(tool, Enchantments.EFFICIENCY, level.registryAccess());
 
         if (effLevel > 0 && tool.isCorrectToolForDrops(blockInFront)) {
             toolSpeed += effLevel * effLevel + 1;
@@ -190,12 +191,16 @@ public class DrillBlockEntity extends BlockEntity implements MenuProvider {
         var maxProgress = Math.max(1, (int)(speed * 20 / toolSpeed));
 
         int durabilityDamage = 1 + (int)(speed / 3f);
-
-        int unbreakingLevel = tool.getEnchantmentLevel(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.UNBREAKING));
-
         boolean applyDamage = true;
-        if (unbreakingLevel > 0) {
-            applyDamage = level.random.nextInt(unbreakingLevel + 1) == 0;
+        try {
+            int unbreakingLevel = ModUtils.getEnchantment(tool, Enchantments.UNBREAKING, level.registryAccess());
+
+            if (unbreakingLevel > 0) {
+                applyDamage = level.random.nextInt(unbreakingLevel + 1) == 0;
+            }
+        }
+        catch (Exception ignore) {
+
         }
 
         if (progress >= maxProgress) {
@@ -255,7 +260,7 @@ public class DrillBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public @Nullable IItemHandler getCapability(@Nullable Direction direction) {
-        if (direction == getBlockState().getValue(DrillBlock.FACING)) {
+        if (direction == getBlockState().getValue(BlockStateProperties.FACING)) {
             return toolHandler;
         }
 

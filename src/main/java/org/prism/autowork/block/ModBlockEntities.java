@@ -7,11 +7,27 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.prism.autowork.Autowork;
 import org.prism.autowork.block.breezecollector.buffered.BufferedBreezeCollectorBlockEntity;
 import org.prism.autowork.block.buffer.BufferBlockEntity;
+import org.prism.autowork.block.can.CanBlockEntity;
+import org.prism.autowork.block.canner.CannerBlockEntity;
 import org.prism.autowork.block.cart_manipulators.buffered.loader.CartLoaderBufferedBlockEntity;
+import org.prism.autowork.block.cart_manipulators.buffered.refiller.CartRefillerBufferedBlockEntity;
 import org.prism.autowork.block.cart_manipulators.buffered.unloader.CartUnloaderBufferedBlockEntity;
 import org.prism.autowork.block.drill.DrillBlockEntity;
+import org.prism.autowork.block.enricher.EnricherBlockEntity;
 import org.prism.autowork.block.filterchute.FilterChuteBlockEntity;
+import org.prism.autowork.block.fisher.FisherBlockEntity;
+import org.prism.autowork.block.fluidbarrel.FluidBarrelBlockEntity;
+import org.prism.autowork.block.harvester.HarvesterBlockEntity;
+import org.prism.autowork.block.holder.HolderBlockEntity;
+import org.prism.autowork.block.painter.PainterBlockEntity;
 import org.prism.autowork.block.placer.PlacerBlockEntity;
+import org.prism.autowork.block.precise_observer.PreciseObserverBlock;
+import org.prism.autowork.block.precise_observer.PreciseObserverBlockEntity;
+import org.prism.autowork.block.pump.PumpBlockEntity;
+import org.prism.autowork.block.repair_station.RepairStationBlockEntity;
+import org.prism.autowork.block.saw.SawBlockEntity;
+import org.prism.autowork.block.sculk_cell.SculkCellBlockEntity;
+import org.prism.autowork.block.templater.TemplaterBlockEntity;
 import org.prism.autowork.block.ticker.TickerBlockEntity;
 
 import java.util.function.Supplier;
@@ -20,9 +36,74 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Autowork.MODID);
 
+    public static final Supplier<BlockEntityType<RepairStationBlockEntity>> REPAIR_STATION_BE =
+            BLOCK_ENTITIES.register("repair_station_be", () -> BlockEntityType.Builder.of(
+                    RepairStationBlockEntity::new, ModBlocks.REPAIR_STATION.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<HarvesterBlockEntity>> HARVESTER_BE =
+            BLOCK_ENTITIES.register("harvester_be", () -> BlockEntityType.Builder.of(
+                    HarvesterBlockEntity::new, ModBlocks.HARVESTER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<CannerBlockEntity>> CANNER_BE =
+            BLOCK_ENTITIES.register("canner_be", () -> BlockEntityType.Builder.of(
+                    CannerBlockEntity::new, ModBlocks.CANNER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<CanBlockEntity>> CAN_BE =
+            BLOCK_ENTITIES.register("can_be", () -> BlockEntityType.Builder.of(
+                    CanBlockEntity::new, ModBlocks.CAN.get(), ModBlocks.OPENED_CAN.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<FisherBlockEntity>> FISHER_BE =
+            BLOCK_ENTITIES.register("fisher_be", () -> BlockEntityType.Builder.of(
+                    FisherBlockEntity::new, ModBlocks.FISHER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<SawBlockEntity>> SAW_BE =
+            BLOCK_ENTITIES.register("saw_be", () -> BlockEntityType.Builder.of(
+                    SawBlockEntity::new, ModBlocks.SAW.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<SculkCellBlockEntity>> SCULK_CELL_BE =
+            BLOCK_ENTITIES.register("sculk_cell_be", () -> BlockEntityType.Builder.of(
+                    SculkCellBlockEntity::new, ModBlocks.SCULK_CELL.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<PainterBlockEntity>> PAINTER_BE =
+            BLOCK_ENTITIES.register("painter_be", () -> BlockEntityType.Builder.of(
+                    PainterBlockEntity::new, ModBlocks.PAINTER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<EnricherBlockEntity>> ENRICHER_BE =
+            BLOCK_ENTITIES.register("enricher_be", () -> BlockEntityType.Builder.of(
+                    EnricherBlockEntity::new, ModBlocks.ENRICHER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<TemplaterBlockEntity>> TEMPLATER_BE =
+            BLOCK_ENTITIES.register("templater_be", () -> BlockEntityType.Builder.of(
+                    TemplaterBlockEntity::new, ModBlocks.TEMPLATER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<HolderBlockEntity>> HOLDER_BE =
+            BLOCK_ENTITIES.register("holder_be", () -> BlockEntityType.Builder.of(
+                    HolderBlockEntity::new, ModBlocks.HOLDER.get()
+            ).build(null));
+
     public static final Supplier<BlockEntityType<BufferBlockEntity>> BUFFER_BE =
             BLOCK_ENTITIES.register("buffer_be", () -> BlockEntityType.Builder.of(
                     BufferBlockEntity::new, ModBlocks.BUFFER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<PumpBlockEntity>> PUMP_BE =
+            BLOCK_ENTITIES.register("pump_be", () -> BlockEntityType.Builder.of(
+                    PumpBlockEntity::new, ModBlocks.PUMP.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<FluidBarrelBlockEntity>> FLUID_BARREL_BE =
+            BLOCK_ENTITIES.register("fluid_barrel_be", () -> BlockEntityType.Builder.of(
+                    FluidBarrelBlockEntity::new, ModBlocks.FLUID_BARREL.get()
             ).build(null));
 
     public static final Supplier<BlockEntityType<BufferedBreezeCollectorBlockEntity>> BUFFERED_BREEZE_COLLECTOR_BE =
@@ -35,9 +116,19 @@ public class ModBlockEntities {
                     DrillBlockEntity::new, ModBlocks.DRILL.get()
             ).build(null));
 
+    public static final Supplier<BlockEntityType<PreciseObserverBlockEntity>> PRECISE_OBSERVER_BE =
+            BLOCK_ENTITIES.register("precise_observer_be", () -> BlockEntityType.Builder.of(
+                    PreciseObserverBlockEntity::new, ModBlocks.PRECISE_OBSERVER.get()
+            ).build(null));
+
     public static final Supplier<BlockEntityType<CartLoaderBufferedBlockEntity>> CARTLOADER_BUFFERED_BE =
             BLOCK_ENTITIES.register("cartloader_be", () -> BlockEntityType.Builder.of(
                     CartLoaderBufferedBlockEntity::new, ModBlocks.BUFFERED_CARTLOADER.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<CartRefillerBufferedBlockEntity>> CARTREFILLER_BUFFERED_BE =
+            BLOCK_ENTITIES.register("cartrefiller_be", () -> BlockEntityType.Builder.of(
+                    CartRefillerBufferedBlockEntity::new, ModBlocks.BUFFERED_CARTREFILLER.get()
             ).build(null));
 
     public static final Supplier<BlockEntityType<CartUnloaderBufferedBlockEntity>> CARTUNLOADER_BUFFERED_BE =

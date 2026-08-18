@@ -2,8 +2,12 @@ package org.prism.autowork.block.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -12,15 +16,20 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.prism.autowork.block.cart_manipulators.CartHelper;
+import org.prism.autowork.other.ModOther;
 import org.prism.autowork.other.ModUtils;
 
 import java.util.List;
@@ -28,6 +37,92 @@ import java.util.function.Supplier;
 
 public final class BlocksAbstractLogic {
     private BlocksAbstractLogic() { }
+
+    public static boolean checkMovable(BlockState state, Level level, BlockPos pos) {
+        return ((!(state.getPistonPushReaction() == PushReaction.DESTROY ||
+                state.getPistonPushReaction() == PushReaction.IGNORE ||
+                state.getPistonPushReaction() == PushReaction.BLOCK || state.getDestroySpeed(level, pos) == -1) || state.is(ModOther.MOVABLE)) || state.is(ModOther.BLOCK_ENTITY_MOVABLE)) &&
+                !state.canBeReplaced();
+    }
+
+    public static void itemHandlerDropper(IItemHandler handler, BlockPos pos, Level level) {
+        for (int i = 0; i < handler.getSlots(); i++) {
+            var stack = handler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                var newItemEntity = new ItemEntity(level, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, stack);
+                level.addFreshEntity(newItemEntity);
+            }
+        }
+    }
+
+    public static void itemUser(BlockPos pos, ItemStack stack, Level level) {
+        int durabilityDamage = 1;
+        boolean applyDamage = true;
+        try {
+            int unbreakingLevel = ModUtils.getEnchantment(stack, Enchantments.UNBREAKING, level.registryAccess());
+
+            if (unbreakingLevel > 0) {
+                applyDamage = level.random.nextInt(unbreakingLevel + 1) == 0;
+            }
+        }
+        catch (Exception ignore) {
+
+        }
+
+        if (stack.has(DataComponents.DAMAGE) && stack.has(DataComponents.MAX_DAMAGE)) {
+            if (applyDamage) {
+                var dmgCurrent = stack.get(DataComponents.DAMAGE);
+                var dmgMax = stack.get(DataComponents.MAX_DAMAGE);
+                dmgCurrent += durabilityDamage;
+                if (dmgCurrent >= dmgMax) {
+                    level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 1, 1.5f);
+                    stack.setCount(0);
+                } else {
+                    stack.set(DataComponents.DAMAGE, dmgCurrent);
+                }
+            }
+        }
+    }
+
+    public static boolean abstractMover(Level level, BlockPos from, BlockPos to) {
+        var currentState = level.getBlockState(from);
+        var toState = level.getBlockState(to);
+
+        if (!toState.canBeReplaced()) {
+            return false;
+        }
+
+        CompoundTag tag = null;
+        var access = level.registryAccess();
+
+        if (level.getBlockEntity(from) instanceof BlockEntity be) {
+            if (currentState.is(ModOther.BLOCK_ENTITY_MOVABLE)) {
+                tag = be.saveCustomOnly(access);
+                be.setRemoved();
+            } else {
+                return false;
+            }
+        }
+        else {
+            if (currentState.getPistonPushReaction() == PushReaction.DESTROY ||
+                    currentState.getPistonPushReaction() == PushReaction.IGNORE ||
+                    currentState.getPistonPushReaction() == PushReaction.BLOCK || currentState.getDestroySpeed(level, from) == -1) {
+                if (!currentState.is(ModOther.MOVABLE)) {
+                    return false;
+                }
+            }
+        }
+
+        level.setBlock(from, Blocks.AIR.defaultBlockState(), 2);
+        level.setBlock(to, currentState, 2);
+        level.sendBlockUpdated(to, currentState, currentState, 3);
+
+        if (tag != null) {
+            level.getBlockEntity(to).loadWithComponents(tag, access);
+        }
+
+        return true;
+    }
 
     public static void cartUnloaderTick(Level level, BlockPos pos, BlockState state, Supplier<IItemHandler> minecartCapGet,
                                         Supplier<IItemHandler> storageCapGet) {
@@ -85,6 +180,80 @@ public final class BlocksAbstractLogic {
 
                         entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
                         caughtAny = true;
+                    }
+                    if (caughtAny) {
+                        level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, true));
+                        level.playSound(null, pos, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS);
+                    }
+                }
+                catch (Exception ignored) {
+
+                }
+            }
+        }
+        else {
+            if (state.getValue(BlockStateProperties.POWERED)) {
+                level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, false));
+            }
+        }
+    }
+
+    public static void cartRefillerTick(Level level, BlockPos pos, BlockState state, Supplier<IItemHandler> storageCapGet) {
+        if (!state.getValue(BlockStateProperties.POWERED) && level.hasNeighborSignal(pos)) {
+            var facing = state.getValue(BlockStateProperties.FACING);
+
+            var front = ModUtils.lookTo(pos, facing);
+
+            var storageCap = storageCapGet.get();
+
+            if (storageCap != null) {
+                try {
+                    var aabb = new AABB(front).inflate(0.2);
+                    List<MinecartChest> entities = level.getEntitiesOfClass(
+                            MinecartChest.class,
+                            aabb,
+                            (et) -> et instanceof MinecartChest
+                    );
+
+                    if (entities.isEmpty()) {
+                        return;
+                    }
+
+                    var filter = CartHelper.getCartName(level, pos, facing);
+                    boolean caughtAny = false;
+
+                    for (MinecartChest entity : entities) {
+                        if (filter != null) {
+                            if (entity.getCustomName() == null) {
+                                continue;
+                            }
+                            if (!entity.getCustomName().getString().equals(filter)) {
+                                continue;
+                            }
+                        }
+
+                        var items = entity.getCapability(Capabilities.ItemHandler.ENTITY);
+
+                        for (int i = 0; i < storageCap.getSlots(); i++) {
+                            var st = storageCap.getStackInSlot(i);
+
+                            if (!st.isEmpty()) {
+                                var remains = ItemHandlerHelper.insertItem(items, st.copy(), false);
+
+                                if (remains.isEmpty()) {
+                                    storageCap.extractItem(i, st.getCount(), false);
+                                }
+                                else if (remains.getCount() < st.getCount()) {
+                                    storageCap.extractItem(i, st.getCount() - remains.getCount(), false);
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                        }
+
+                        caughtAny = true;
+                        break;
                     }
                     if (caughtAny) {
                         level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, true));
@@ -215,7 +384,7 @@ public final class BlocksAbstractLogic {
             return;
         }
 
-        var facing = state.getValue(BlockStateProperties.FACING);
+        var facing = ModUtils.getLook(level, pos, state.getValue(BlockStateProperties.FACING));
 
         var container = containerGet.get();
 
@@ -226,7 +395,7 @@ public final class BlocksAbstractLogic {
         var face = ModUtils.direction2vec(facing);
         var aabbAdd = ModUtils.vecMultiply(face, aabbSide/2.0);
 
-        var aabb = new AABB(pos);
+        var aabb = ModUtils.safeAABBfromPos(pos.mutable(), level);
         aabb = aabb.inflate(aabbSide).move(aabbAdd.add(aabbAdd));
 
         List<ItemEntity> entities = level.getEntitiesOfClass(
@@ -235,10 +404,9 @@ public final class BlocksAbstractLogic {
                 (et) -> et instanceof ItemEntity
         );
 
-        var start = ModUtils.blockPosVec(ModUtils.lookTo(pos, facing));
+        var start = ModUtils.blockPos2Vec(ModUtils.safeBlockPos(ModUtils.lookTo(pos, facing), level));
 
-        for (int i = 0; i < entities.size(); i++) {
-            var entity = entities.get(i);
+        for (var entity : entities) {
             var position = entity.position();
 
             if (Math.sqrt(entity.distanceToSqr(start)) <= 1.5f) {
@@ -246,8 +414,7 @@ public final class BlocksAbstractLogic {
 
                 if (!remains.isEmpty()) {
                     entity.setItem(remains);
-                }
-                else {
+                } else {
                     level.playSound(null, pos, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS);
                     entity.remove(Entity.RemovalReason.DISCARDED);
                 }
@@ -258,7 +425,7 @@ public final class BlocksAbstractLogic {
             var delta = ModUtils.vecDivide(position.subtract(start), 2.5);
             delta = ModUtils.vecDivide(delta, 10);
 
-            entity.addDeltaMovement(delta.multiply(-1,-1,-1));
+            entity.addDeltaMovement(delta.multiply(-1, -1, -1));
             entity.hurtMarked = true;
         }
     }

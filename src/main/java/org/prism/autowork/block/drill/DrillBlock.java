@@ -23,12 +23,14 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.prism.autowork.block.ModBlockEntities;
+import org.prism.autowork.block.common.BlocksAbstractLogic;
 import org.prism.autowork.blockhelp.BlockHelpInfo;
 import org.prism.autowork.blockhelp.BlockHelpProvider;
 import org.prism.autowork.hudinv.HudInventoryProvider;
@@ -36,8 +38,6 @@ import org.prism.autowork.other.ModOther;
 
 public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
     public static final MapCodec<DrillBlock> CODEC = simpleCodec(DrillBlock::new);
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
-    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty HAS_TOOL = BooleanProperty.create("has_tool");
 
     public DrillBlock(Properties p_49224_) {
@@ -70,7 +70,7 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
 
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        if (level.getBlockEntity(pos) instanceof DrillBlockEntity be && direction == state.getValue(FACING)) {
+        if (level.getBlockEntity(pos) instanceof DrillBlockEntity be && direction == state.getValue(BlockStateProperties.FACING)) {
             return be.getToolSignal();
         }
 
@@ -81,19 +81,8 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && !state.is(newState.getBlock()) && !movedByPiston) {
             if (level.getBlockEntity(pos) instanceof DrillBlockEntity be) {
-                for (int i = 0; i < be.handler.getSlots(); i++) {
-                    var stack = be.handler.getStackInSlot(i);
-                    if (!stack.isEmpty()) {
-                        var newItemEntity = new ItemEntity(level, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, stack);
-                        level.addFreshEntity(newItemEntity);
-                    }
-                }
-
-                if (be.hasTool()) {
-                    var toolEntity = new ItemEntity(level, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, be.extractTool());
-
-                    level.addFreshEntity(toolEntity);
-                }
+                BlocksAbstractLogic.itemHandlerDropper(be.handler, pos, level);
+                BlocksAbstractLogic.itemHandlerDropper(be.toolHandler, pos, level);
             }
         }
 
@@ -108,12 +97,12 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof DrillBlockEntity be) {
-            if (stack.is(ModOther.TOOL_TAG) && !be.hasTool() && hit.getDirection() == state.getValue(FACING)) {
+            if (stack.is(ModOther.TOOL_TAG) && !be.hasTool() && hit.getDirection() == state.getValue(BlockStateProperties.FACING)) {
                 if(be.putTool(stack))
                     stack.setCount(0);
                 return ItemInteractionResult.SUCCESS;
             }
-            else if (be.hasTool() && player.getMainHandItem().isEmpty() && hit.getDirection() == state.getValue(FACING)) {
+            else if (be.hasTool() && player.getMainHandItem().isEmpty() && hit.getDirection() == state.getValue(BlockStateProperties.FACING)) {
                 player.getInventory().add(be.extractTool());
                 return ItemInteractionResult.SUCCESS;
             }
@@ -143,12 +132,12 @@ public class DrillBlock extends BaseEntityBlock implements BlockHelpProvider {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED, HAS_TOOL);
+        builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED, HAS_TOOL);
     }
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(POWERED, false).setValue(HAS_TOOL, false).setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState().setValue(BlockStateProperties.POWERED, false).setValue(HAS_TOOL, false).setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override

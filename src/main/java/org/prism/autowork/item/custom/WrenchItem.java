@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import org.prism.autowork.ClientConfig;
 import org.prism.autowork.other.ModOther;
 
 import java.util.List;
@@ -28,6 +29,15 @@ public class WrenchItem extends Item {
                 context.getLevel().scheduleTick(pos, block, 1);
                 context.getLevel().playSound(null, pos, SoundEvents.VAULT_ACTIVATE, SoundSource.PLAYERS, 1, 1.5f);
 
+                if (state.getBlock() instanceof IWrenchable wrenchable) {
+                    wrenchable.wrench(context.getLevel(), pos, state);
+                }
+
+                return InteractionResult.SUCCESS;
+            }
+            if (state.getBlock() instanceof IWrenchable wrenchable) {
+                context.getLevel().playSound(null, pos, SoundEvents.VAULT_ACTIVATE, SoundSource.PLAYERS, 1, 1.5f);
+                wrenchable.wrench(context.getLevel(), pos, state);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -38,6 +48,7 @@ public class WrenchItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> components, TooltipFlag flag) {
         super.appendHoverText(stack, ctx, components, flag);
+        if (!ClientConfig.BLOCKHELP_TOOLTIPS.get()) return;
 
         if (!flag.hasControlDown()) {
             components.add(Component.translatable("itemhelp.show_more").withColor(0xF3FF47));

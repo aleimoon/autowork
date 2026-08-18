@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.prism.autowork.block.ModBlockEntities;
+import org.prism.autowork.block.common.BlocksAbstractLogic;
 import org.prism.autowork.block.drill.DrillBlock;
 import org.prism.autowork.block.placer.PlacerBlockEntity;
 import org.prism.autowork.blockhelp.BlockHelpInfo;
@@ -51,13 +52,7 @@ public class BufferBlock extends BaseEntityBlock implements BlockHelpProvider {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && !state.is(newState.getBlock()) && !movedByPiston) {
             if (level.getBlockEntity(pos) instanceof BufferBlockEntity be) {
-                for (int i = 0; i < be.handler.getSlots(); i++) {
-                    var stack = be.handler.getStackInSlot(i);
-                    if (!stack.isEmpty()) {
-                        var newItemEntity = new ItemEntity(level, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, stack);
-                        level.addFreshEntity(newItemEntity);
-                    }
-                }
+                BlocksAbstractLogic.itemHandlerDropper(be.handler, pos, level);
             }
         }
 
@@ -71,11 +66,11 @@ public class BufferBlock extends BaseEntityBlock implements BlockHelpProvider {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level.getBlockEntity(pos) instanceof HudInventoryProvider prov) {
+        if (level.getBlockEntity(pos) instanceof HudInventoryProvider prov && !level.isClientSide) {
             return prov.useOn(player.getMainHandItem(), hit.getDirection(), level, pos, player).result();
         }
 
-        return super.useWithoutItem(state, level, pos, player, hit);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
